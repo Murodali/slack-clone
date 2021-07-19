@@ -1,14 +1,31 @@
-import { Avatar } from "@material-ui/core";
+import { Avatar, Button } from "@material-ui/core";
 import { AccessTime, Help, Search } from "@material-ui/icons";
 import React from "react";
 import styled from "styled-components";
+import {useAuthState} from 'react-firebase-hooks/auth';
+import { auth } from "../firebase";
+
+
 
 function Header() {
+  const [user,loading] = useAuthState(auth);
+
+  const singOut =(e) => {
+    e.preventDefault();
+
+    auth.signOut().then(() => {
+    }).catch((err) => {
+      console.log(err)
+    });
+  }
+
   return (
     <HeaderContainer className="header">
       <HeaderLeft>
 
-          <HeaderAvatar />
+          <HeaderAvatar
+          src={user?.photoURL}
+          />
         <AccessTime></AccessTime>
       </HeaderLeft>
 
@@ -19,6 +36,7 @@ function Header() {
 
       <HeaderRight>
           <Help></Help>
+          <Button onClick={singOut} >Sing Out</Button>
       </HeaderRight>
 
     </HeaderContainer>
@@ -90,4 +108,18 @@ const HeaderRight = styled.div`
     margin-right: 20px;
     margin-left: auto;
     justify-content: flex-end;
+    align-items: center;
+
+    > button{
+      color: purple;
+      background-color: white;
+      margin: 0 5px;
+      text-transform: capitalize;
+
+    }
+
+    >button:hover{
+      background-color: whitesmoke;
+     
+    }
 `;

@@ -3,9 +3,13 @@ import React,{useState} from 'react';
 import styled from "styled-components";
 import { db } from '../firebase';
 import firebase from'firebase';
+import {useAuthState} from 'react-firebase-hooks/auth';
+import { auth } from "../firebase";
 
 
 function ChatInput({channelId,channelName, chatRef}) {
+    const [user,loading] = useAuthState(auth);
+
 
     const [input, setInput] = useState('');
     const sendMessage = (e) => {
@@ -18,8 +22,8 @@ function ChatInput({channelId,channelName, chatRef}) {
         db.collection("rooms").doc(channelId).collection("messages").add({
             message:input,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-            user: 'Murodali Sharipov',
-            userImg:'https://www.dmarge.com/wp-content/uploads/2021/01/dwayne-the-rock-.jpg'
+            user: user.displayName,
+            userImg:user.photoURL
         });
 
         setInput('');

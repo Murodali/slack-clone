@@ -4,20 +4,23 @@ import styled from "styled-components";
 import SidebarOptions from './SidebarOptions';
 import { useCollection } from 'react-firebase-hooks/firestore';
 import { db } from '../firebase';
+import {useAuthState} from 'react-firebase-hooks/auth';
+import { auth } from "../firebase";
 
 function SideBar() {
 
     const[channels,loading,error] = useCollection(db.collection('rooms'));
+    const [user] = useAuthState(auth);
 
     return (
         <SideBarContainer>
 
             <SidebarHeader>
                 <SidebarLeft>
-                    <h2>Name of Slack</h2>
+                    <h2>Slack Clone</h2>
                     <h3>
                         <FiberManualRecord></FiberManualRecord>
-                        Murodali Sharipov
+                        {user.displayName}
                     </h3>
 
                 </SidebarLeft>
